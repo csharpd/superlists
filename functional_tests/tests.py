@@ -1,6 +1,5 @@
 from django.test import LiveServerTestCase
 from selenium import webdriver
-import unittest
 from selenium.webdriver.common.keys import Keys
 
 
@@ -23,7 +22,8 @@ class NewVisitorTest(LiveServerTestCase):
 
         self.assertIn('To-Do', self.browser.title)
         header_text = self.browser.find_element_by_tag_name('h1').text
-        self.assertIn("Your To-Do list", header_text)
+        self.assertIn("Start a new To-Do list", header_text)
+
         inputbox = self.browser.find_element_by_id('id_new_item')
         self.assertEqual(
                 inputbox.get_attribute('placeholder'),
@@ -65,5 +65,5 @@ class NewVisitorTest(LiveServerTestCase):
 
         # no trace of edith
         page_text = self.browser.find_element_by_tag_name('body').text
-        self.assertNotIn('Buy peakcock feathers', page_text)
+        self.assertNotIn('Buy peacock feathers', page_text)
         self.assertIn('Buy milk', page_text)
