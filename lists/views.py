@@ -24,15 +24,12 @@ def new_list(request):
         return render(request, 'home.html', {"error": error})
     return redirect('/lists/%d/' % (list_.id,))
 
-# get the correct list. Add an item to that list. Redirect to lists
-def add_item(request, list_id):
-    list_ = List.objects.get(id=list_id)
-    Item.objects.create(text=request.POST['item_text'], list=list_)
-    return redirect('/lists/%d/' % (list_.id,))
 
 # view a particular list
 
 def view_list(request, list_id):
     list_ = List.objects.get(id=list_id)
+    if request.method == 'POST':
+        Item.objects.create(text=request.POST['item_text'], list=list_)
+        return redirect('/lists/%d/' % (list_.id,))
     return render(request, 'list.html', {'list': list_})
-
