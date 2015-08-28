@@ -1,12 +1,13 @@
 from django.core.exceptions import ValidationError
 from django.shortcuts import redirect, render
 from lists.models import Item, List
+from lists.forms import ItemForm
 
 # urls.py calls this view method. The request returns the response containing home.html.
 # django's render function (request, name of template to render) - automatically searches
 # inside the templates dir, then builts a HttpResponse for you
 def home_page(request):
-    return render(request, 'home.html')
+    return render(request, 'home.html', {'form': ItemForm()})
 
 # The form on the home page calls this method.
 # A List and an Item are created simultaneously.
