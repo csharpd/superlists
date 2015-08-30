@@ -1,29 +1,27 @@
-from django.core.exceptions import ValidationError
 from django.shortcuts import redirect, render
-from lists.models import Item, List
-from lists.forms import ExistingListItemForm, ItemForm
+from django.contrib.auth import get_user_model
+User = get_user_model()
 
-# urls.py calls this view method. The request returns the response containing home.html.
-# django's render function (request, name of template to render) - automatically searches
-# inside the templates dir, then builts a HttpResponse for you
+from lists.forms import ExistingListItemForm, ItemForm
+from lists.models import List
+
+
 def home_page(request):
     return render(request, 'home.html', {'form': ItemForm()})
 
-# The form on the home page calls this method.
-# A List and an Item are created simultaneously.
-# The items text will be the info that came
-# with text and it will be linked to the list. list=list_
+
 def new_list(request):
     form = ItemForm(data=request.POST)
     if form.is_valid():
-        list_ = List.objects.create()
+        list_ = List()
+        if request.user.is_authenticated():
+            list_.owner = request.user
+        list_.save()
         form.save(for_list=list_)
         return redirect(list_)
     else:
         return render(request, 'home.html', {"form": form})
 
-
-# view a particular list
 
 def view_list(request, list_id):
     list_ = List.objects.get(id=list_id)
@@ -34,3 +32,8 @@ def view_list(request, list_id):
             form.save()
             return redirect(list_)
     return render(request, 'list.html', {'list': list_, "form": form})
+
+
+def my_lists(request, email):
+    owner = User.objects.get(email=email)
+    return render(request, 'my_lists.html', {'owner': owner})
