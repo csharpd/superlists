@@ -3,7 +3,6 @@
         <title>To-Do lists</title>
         <link rel="stylesheet" href="/static/base.css" media="screen"/>
     </head>
-
     <body>
         <h1 class="header">{% block header_text %}{% endblock %}</h1>
         <form class="todo_item__input" method="POST" action="{% block form_action %}{% endblock %}">
@@ -17,5 +16,7 @@
         </form>
         {% block table %}
         {% endblock %}
+    <script src="http://code.jquery.com/jquery.min.js"></script>
+    <script src="/static/list.js"></script>
     </body>
 </html>
